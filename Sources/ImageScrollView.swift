@@ -16,7 +16,6 @@ open class ImageScrollView: UIScrollView {
     var imageSize: CGSize = CGSize.zero
     fileprivate var pointToCenterAfterResize: CGPoint = CGPoint.zero
     fileprivate var scaleToRestoreAfterResize: CGFloat = 1.0
-    var maxScaleFromMinScale: CGFloat = 3.0
     
     override open var frame: CGRect {
         willSet {
@@ -127,11 +126,11 @@ open class ImageScrollView: UIScrollView {
     fileprivate func minimumContentOffset() -> CGPoint {
         return CGPoint.zero
     }
-
+    
     // MARK: - Display image
     
     open func display(image image: UIImage) {
-
+        
         if let zoomView = zoomView {
             zoomView.removeFromSuperview()
         }
@@ -165,7 +164,7 @@ open class ImageScrollView: UIScrollView {
         let phonePortrait = bounds.height >= bounds.width
         var minScale = (imagePortrait == phonePortrait) ? xScale : min(xScale, yScale)
         
-        let maxScale = maxScaleFromMinScale*minScale
+        let maxScale = imageSize.width / (bounds.width * UIScreen.main.scale)
         
         // don't let minScale exceed maxScale. (If the image is smaller than the screen, we don't want to force it to be zoomed.)
         if minScale > maxScale {
